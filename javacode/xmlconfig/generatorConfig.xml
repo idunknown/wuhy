@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <common>
+        <package>
+            com.yinhai.test
+        </package>
+   <!--输出路径-->
+        <file-path>
+            F:\wuhy\javacode\
+        </file-path>
+    </common>
+    <tables>
+        <table name="wuhy" package-name="com.yinhai.test.he" table-annotation="描述描述" >
+            <!--默认使用表名，包名-->
+            <class include-class="" no-include-class="" templates-path="/templates/class">
+            </class>
+            <!--模板路径可以配置，如果路径下有多个，则每个都生成，也可是路径下的一个，sql路径可以另外输出，也可以默认输出-->
+            <sql enableCountByExample="false" enableUpdateByExample="false"
+                 enableDeleteByExample="false" enableSelectByExample="false"
+                 electByExampleQueryId="false" templates-path="/templates/sql" template="" sql-path="">
+            </sql>
+            <!--模板路径可以配置，如果路径下有多个，则每个都生成，也可是路径下的一个，jsp路径可以另外输出，也可以默认输出-->
+            <jsp jsp-file-path="/myjsp" templates-path="/templates/jsp" template="">
+            </jsp>
+        </table>
+    </tables>
+
+</root>

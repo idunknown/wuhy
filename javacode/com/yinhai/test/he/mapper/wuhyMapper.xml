@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinhai.test.he.domain.WuhyMapper">
+
+    <resultMap id="WuhyDTOResultMap" type="com.yinhai.test.he.dto.WuhyDTO"></resultMap>
+
+    <sql id="findDtoSql">
+        select * from (
+        select * from  wuhy temp
+        ) t
+    </sql>
+
+    <select id="findDTOById" parameterType="String" resultMap="WuhyDTOResultMap">
+        <include refid="findDtoSql"></include>
+        <where>
+            and t.id = #{id}
+        </where>
+    </select>
+
+    <select id="findWuhyPage" parameterType="com.yinhai.test.he.dto.WuhyDTO" resultMap="WuhyDTOResultMap">
+        <include refid="findDtoSql" />
+        <where>
+
+        </where>
+    </select>
+
+</mapper>
