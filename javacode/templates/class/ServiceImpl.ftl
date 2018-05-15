@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ${package_name!}.entity.${table_name!}Entity;
 import ${package_name!}.domain.${table_name!}Mapper;
 import com.yinhai.sysframework.service.BaseService;
+import javax.annotation.Resource;
 
 /**
 * 描述：${table_annotation} 服务实现层
@@ -37,7 +38,7 @@ public class ${table_name}ServiceImpl extends BaseService  implements ${table_na
 
     @Override
     public ${table_name!}Entity update${table_name!}(${table_name!}Entity ${table_name!?uncap_first}Entity) throws Exception{
-        return null;
+        return  ${table_name?uncap_first}Mapper.update${table_name!}(${table_name!?uncap_first}Entity);
     }
 
 }

@@ -1,42 +1,42 @@
-package ${package_name}.controller;
+package com.yinhai.test.he.controller;
 import com.yinhai.webframework.BaseAction;
-import  ${package_name}.service.${table_name!}Service;
+import  com.yinhai.test.he.service.MenuService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ${package_name!}.entity.${table_name!}Entity;
+import com.yinhai.test.he.entity.MenuEntity;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import com.yinhai.sysframework.dto.ParamDTO;
 import com.yinhai.sysframework.util.ValidateUtil;
 /**
-* 描述：${table_annotation!}控制层
-* @author ${author!}
-* @date ${date!}
+* 描述：描述描述控制层
+* @author Wuhy
+* @date 2018/05/14
 */
 @Controller
-@RequestMapping("/${table_name_small!}")
-public class ${table_name!}Controller extends BaseAction{
+@RequestMapping("/menu")
+public class MenuController extends BaseAction{
 
-    @Resource(name = "${table_name_small!}Service")
-    private ${table_name!}Service ${table_name_small!}Service;
+    @Resource(name = "menuService")
+    private MenuService menuService;
 
     /**
      * 页面
      * @return 页面地址
      */
-    @RequestMapping("/to${table_name!}Index.do")
+    @RequestMapping("/toMenuIndex.do")
     public String toExaminationJsp(){
-        return "${jsp_file_path!}/${table_name_small!}/index";
+        return "/myjsp/menu/index";
     }
 
     /**
      * 获取单条数据 by id
      * @return
      */
-    @RequestMapping("/to${table_name!}Index!getOne${table_name!}Entity.do")
-    public String getOne${table_name!}Entity(){
+    @RequestMapping("/toMenuIndex!getOneMenuEntity.do")
+    public String getOneMenuEntity(){
         ParamDTO dto = getDto();
         Object id=dto.get("id");
         if(ValidateUtil.isEmpty(id)){
@@ -44,8 +44,8 @@ public class ${table_name!}Controller extends BaseAction{
             return JSON;
         }
         try{
-           ${table_name}Entity   ${table_name_small}Entity  = ${table_name_small!}Service.find${table_name}ById(id.toString());
-           setData(${table_name_small}Entity.toMap(),true);
+           MenuEntity   menuEntity  = menuService.findMenuById(id.toString());
+           setData(menuEntity.toMap(),true);
         }catch (Exception e){
             e.printStackTrace();
             setMsg("系统异常!","ERROR");
@@ -59,12 +59,12 @@ public class ${table_name!}Controller extends BaseAction{
      * 增加数据
      * @return
      */
-    @RequestMapping("/to${table_name!}Index!create${table_name}.do")
-    public String create${table_name}(){
+    @RequestMapping("/toMenuIndex!createMenu.do")
+    public String createMenu(){
         ParamDTO dto = getDto();
-        ${table_name}Entity ${table_name?uncap_first}Entity = new ${table_name}Entity(dto);
+        MenuEntity menuEntity = new MenuEntity(dto);
         try{
-            ${table_name_small!}Service.create${table_name}( ${table_name?uncap_first}Entity);
+            menuService.createMenu( menuEntity);
          }catch (Exception e){
             e.printStackTrace();
             setMsg("系统异常!","ERROR");
@@ -77,8 +77,8 @@ public class ${table_name!}Controller extends BaseAction{
      * 删除单条数据
      * @return
      */
-    @RequestMapping("/to${table_name!}Index!delete${table_name!}.do")
-    public String delete${table_name!}(){
+    @RequestMapping("/toMenuIndex!deleteMenu.do")
+    public String deleteMenu(){
         ParamDTO dto = getDto();
         Object id=dto.get("id");
         if(ValidateUtil.isEmpty(id)){
@@ -86,7 +86,7 @@ public class ${table_name!}Controller extends BaseAction{
             return JSON;
         }
         try{
-          ${table_name_small!}Service.delete${table_name!}(id.toString());
+          menuService.deleteMenu(id.toString());
            setData("删除成功!",true);
         }catch (Exception e){
             e.printStackTrace();
@@ -100,12 +100,12 @@ public class ${table_name!}Controller extends BaseAction{
      * 增加数据
      * @return
      */
-    @RequestMapping("/to${table_name!}Index!update${table_name}.do")
-    public String update${table_name}(){
+    @RequestMapping("/toMenuIndex!updateMenu.do")
+    public String updateMenu(){
         ParamDTO dto = getDto();
-        ${table_name}Entity ${table_name?uncap_first}Entity = new ${table_name}Entity(dto);
+        MenuEntity menuEntity = new MenuEntity(dto);
         try{
-        ${table_name_small!}Service.update${table_name}( ${table_name?uncap_first}Entity);
+        menuService.updateMenu( menuEntity);
          }catch (Exception e){
             e.printStackTrace();
             setMsg("系统异常!","ERROR");

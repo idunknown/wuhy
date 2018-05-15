@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinhai.test.he.domain.MenuMapper">
+    <resultMap id="MenuEntityResultMap" type="com.yinhai.test.he.dto.MenuEntity"></resultMap>
+    <parameterMap id="MenuEntityParameterMap" type="com.yinhai.test.he.dto.MenuEntity"></parameterMap>
+    <sql id="findEntitySql">
+        select * from  menu temp
+    </sql>
+
+    <select id="findMenuById" parameterType="String" resultMap="MenuEntityResultMap">
+        <include refid="findEntitySql"></include>
+        <where>
+            and t.id = #{id,jdbcType=int}
+        </where>
+    </select>
+    <insert id="createMenu" parameterMap="MenuEntityParameterMap">
+        insert into menu(
+           menuid ,
+           name ,
+           url ,
+           effective 
+        ) values(
+           #{menuid,jdbcType=INT} ,
+           #{name,jdbcType=VARCHAR} ,
+           #{url,jdbcType=VARCHAR} ,
+           #{effective,jdbcType=CHAR} 
+        )
+    </insert>
+    <delete id="deleteMenu"  parameterType="String" >
+        delete from menu
+        <where>
+            and t.id = #{id,jdbcType=int}
+        </where>
+    </delete>
+    <update id="updateMenu" parameterMap="MenuEntityParameterMap">
+        update   menu  set
+           menuid =#{menuid,jdbcType=INT} ,
+           name =#{name,jdbcType=VARCHAR} ,
+           url =#{url,jdbcType=VARCHAR} ,
+           effective =#{effective,jdbcType=CHAR} 
+
+    </update>
+</mapper>

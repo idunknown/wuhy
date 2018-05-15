@@ -65,8 +65,9 @@ public class CodeGenerateUtils {
                 generateServiceInterfaceFile(tableEntity,classEntity);
                 generateControllerFile(tableEntity,classEntity);
                 generateServiceImplFile(tableEntity,classEntity);
-                generateMapperXmlFile(  tableEntity,  classEntity);
+                generateMapperXmlFile(  tableEntity,  classEntity,resultSet);
                 generateMapperFile(  tableEntity,  classEntity);
+                resultSet = databaseMetaData.getColumns(null,"%", tableEntity.getName(),"%");
                 generateEntityFile(  tableEntity,  classEntity,resultSet);
 
             }
@@ -167,7 +168,7 @@ public class CodeGenerateUtils {
         generateFileByTemplate(templateName,interFaseServiceFile,dataMap);
     }
 
-    private void generateMapperXmlFile(TableEntity tableEntity,ClassEntity classEntity) throws Exception{
+    private void generateMapperXmlFile(TableEntity tableEntity, ClassEntity classEntity,ResultSet resultSet) throws Exception{
         final String suffix = "Mapper.xml";
         String diskPath="";
         String tablePackage=tableEntity.getPackageName();
@@ -179,7 +180,24 @@ public class CodeGenerateUtils {
         final String templateName = "sql\\MapperXml.ftl";
         final String path = diskPath + tableEntity.getName() + suffix;
         File mapperFile = new File(path);
+        List<ColumnEntity> ColumnEntityList = new ArrayList<>();
+        ColumnEntity ColumnEntity = null;
+        while(resultSet.next()){
+            //id字段略过
+            if(resultSet.getString("COLUMN_NAME").equals("id")) continue;
+            ColumnEntity = new ColumnEntity();
+            //获取字段名称
+            ColumnEntity.setColumnName(resultSet.getString("COLUMN_NAME"));
+            //获取字段类型
+            ColumnEntity.setColumnType(resultSet.getString("TYPE_NAME"));
+            //转换字段名称，如 sys_name 变成 SysName
+            ColumnEntity.setChangeColumnName(replaceUnderLineAndUpperCase(resultSet.getString("COLUMN_NAME")));
+            //字段在数据库的注释
+            ColumnEntity.setColumnComment(resultSet.getString("REMARKS"));
+            ColumnEntityList.add(ColumnEntity);
+        }
         Map<String,Object> dataMap = new HashMap<>();
+        dataMap.put("model_column",ColumnEntityList);
         dataMap.put("table_name_small",tableEntity.getName());
         dataMap.put("table_name",upperCase(tableEntity.getName()));
         dataMap.put("table_annotation",upperCase(tableEntity.getTableAnnotation()));

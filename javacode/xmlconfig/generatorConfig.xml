@@ -10,7 +10,7 @@
         </file-path>
     </common>
     <tables>
-        <table name="wuhy" package-name="com.yinhai.test.he" table-annotation="描述描述" >
+        <table  name="menu" package-name="com.yinhai.test.he" table-annotation="描述描述" >
             <!--默认使用表名，包名-->
             <class include-class="" no-include-class="" templates-path="/templates/class">
             </class>
