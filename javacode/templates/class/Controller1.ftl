@@ -1,6 +1,6 @@
 package ${package_name}.controller;
 import com.yinhai.webframework.BaseAction;
-import  ${package_name}.service.impl.${table_name_small!}Service;
+import  ${package_name}.service.${table_name!}Service;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;

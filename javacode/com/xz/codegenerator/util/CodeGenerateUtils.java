@@ -66,6 +66,8 @@ public class CodeGenerateUtils {
                 generateControllerFile(tableEntity,classEntity);
                 generateServiceImplFile(tableEntity,classEntity);
                 generateMapperXmlFile(  tableEntity,  classEntity);
+                generateMapperFile(  tableEntity,  classEntity);
+                generateEntityFile(  tableEntity,  classEntity,resultSet);
 
             }
 
@@ -174,7 +176,7 @@ public class CodeGenerateUtils {
         }else{
             diskPath+=XmlUtil.filePath+tableEntity.getPackageName().replaceAll("\\.","\\\\")+"\\mapper\\";
         }
-        final String templateName = "sql\\Mapper.ftl";
+        final String templateName = "sql\\MapperXml.ftl";
         final String path = diskPath + tableEntity.getName() + suffix;
         File mapperFile = new File(path);
         Map<String,Object> dataMap = new HashMap<>();
@@ -185,14 +187,23 @@ public class CodeGenerateUtils {
         generateFileByTemplate(templateName,mapperFile,dataMap);
 
     }
-
-    private void generateMapperJavaFile(ResultSet resultSet) throws Exception{
+    private void generateMapperFile(TableEntity tableEntity,ClassEntity classEntity) throws Exception{
         final String suffix = "Mapper.java";
-        final String path = diskPath + changeTableName + suffix;
-        final String templateName = "Mapper.ftl";
+        String diskPath="";
+        String tablePackage=tableEntity.getPackageName();
+        if(tablePackage==null||tablePackage==""){
+            diskPath+=XmlUtil.filePath+XmlUtil.commonPackage.replaceAll(".","\\")+"\\domain\\";
+        }else{
+            diskPath+=XmlUtil.filePath+tableEntity.getPackageName().replaceAll("\\.","\\\\")+"\\domain\\";
+        }
+        final String templateName = "class\\Mapper.ftl";
+        final String path = diskPath + upperCase(tableEntity.getName()) + suffix;
         File mapperFile = new File(path);
         Map<String,Object> dataMap = new HashMap<>();
-
+        dataMap.put("table_name_small",tableEntity.getName());
+        dataMap.put("table_name",upperCase(tableEntity.getName()));
+        dataMap.put("table_annotation",upperCase(tableEntity.getTableAnnotation()));
+        dataMap.put("package_name",(tablePackage==null||tablePackage=="")?XmlUtil.commonPackage:tablePackage);
         generateFileByTemplate(templateName,mapperFile,dataMap);
 
     }
@@ -212,19 +223,20 @@ public class CodeGenerateUtils {
 
 
 
-    private void generateModelFile(ResultSet resultSet) throws Exception{
 
-        final String suffix = ".java";
-        final String path = diskPath+"model\\" + changeTableName + suffix;
-        final String templateName = "Model.ftl";
-        File mapperFile = new File(path);
-        File DTOFile = new File(path);
-        if(!DTOFile.exists()){
-            File file=new File(DTOFile.getParent());
-            if(!file.isDirectory()){
-                file.mkdirs();
-            }
+    private void generateEntityFile(TableEntity tableEntity,ClassEntity classEntity,ResultSet resultSet) throws Exception{
+
+        final String suffix = "Entity.java";
+        String diskPath="";
+        String tablePackage=tableEntity.getPackageName();
+        if(tablePackage==null||tablePackage==""){
+            diskPath+=XmlUtil.filePath+XmlUtil.commonPackage.replaceAll(".","\\")+"\\entity\\";
+        }else{
+            diskPath+=XmlUtil.filePath+tableEntity.getPackageName().replaceAll("\\.","\\\\")+"\\entity\\";
         }
+        final String templateName = "class\\Entity.ftl";
+        final String path = diskPath + upperCase(tableEntity.getName()) + suffix;
+        File entityFile = new File(path);
         List<ColumnEntity> ColumnEntityList = new ArrayList<>();
         ColumnEntity ColumnEntity = null;
         while(resultSet.next()){
@@ -243,45 +255,16 @@ public class CodeGenerateUtils {
         }
         Map<String,Object> dataMap = new HashMap<>();
         dataMap.put("model_column",ColumnEntityList);
-        generateFileByTemplate(templateName,mapperFile,dataMap);
+        dataMap.put("table_name_small",tableEntity.getName());
+        dataMap.put("table_name",upperCase(tableEntity.getName()));
+        dataMap.put("table_annotation",upperCase(tableEntity.getTableAnnotation()));
+        dataMap.put("package_name",(tablePackage==null||tablePackage=="")?XmlUtil.commonPackage:tablePackage);
+        generateFileByTemplate(templateName,entityFile,dataMap);
 
     }
 
-    private void generateDTOFile(ResultSet resultSet) throws Exception{
-        final String suffix = "DTO.java";
-        final String path = diskPath+"dto\\"+ changeTableName + suffix;
-        final String templateName = "DTO.ftl";
-        File DTOFile = new File(path);
-        if(!DTOFile.exists()){
-            File file=new File(DTOFile.getParent());
-            if(!file.isDirectory()){
-                file.mkdirs();
-            }
-        }
-        Map<String,Object> dataMap = new HashMap<>();
-        generateFileByTemplate(templateName,DTOFile,dataMap);
-    }
 
 
-
-    private void generateRepositoryFile(ResultSet resultSet) throws Exception{
-        final String suffix = "Repository.java";
-        final String path = diskPath + changeTableName + suffix;
-        final String templateName = "Repository.ftl";
-        File mapperFile = new File(path);
-        Map<String,Object> dataMap = new HashMap<>();
-        generateFileByTemplate(templateName,mapperFile,dataMap);
-    }
-
-    private void generateDaoFile(ResultSet resultSet) throws Exception{
-        final String suffix = "DAO.java";
-        final String path = diskPath + changeTableName + suffix;
-        final String templateName = "DAO.ftl";
-        File mapperFile = new File(path);
-        Map<String,Object> dataMap = new HashMap<>();
-        generateFileByTemplate(templateName,mapperFile,dataMap);
-
-    }
 
 
     private void generateFileByTemplate(final String templateName,File file,Map<String,Object> dataMap) throws Exception{
